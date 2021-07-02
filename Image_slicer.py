@@ -2,7 +2,7 @@ class Slicer ():
     def __init__(self, image):
         self.image=image
         
-    def image_2 (image):
+    def image_2 (self,image):
       img_1t=tf.image.rot90(image=image, k=1)
 
       first=tf.keras.layers.Cropping1D(cropping=(150,1))(img_1t.numpy())
