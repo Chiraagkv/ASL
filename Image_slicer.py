@@ -1,6 +1,19 @@
 class Slicer ():
     def __init__(self, image):
         self.image=image
+        
+    def image_2 (image):
+      img_1t=tf.image.rot90(image=image, k=1)
+
+      first=tf.keras.layers.Cropping1D(cropping=(150,1))(img_1t.numpy())
+
+      second=tf.image.flip_left_right(img_1t.numpy())
+
+      second=tf.keras.layers.Cropping1D(cropping=(150,1))(second.numpy())
+
+      first=tf.image.rot90(first, k=3)
+      second=tf.image.rot90(second, k=3)
+      return first, second
     def process_complete (self):
         list_full=[]
         img=tf.io.read_file(self.image)
