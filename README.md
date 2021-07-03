@@ -1,2 +1,2 @@
 # object detection 
-This project detects objects and how far they are. 
+This project converts ASL symbols to text
