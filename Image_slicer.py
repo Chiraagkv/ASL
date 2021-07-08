@@ -1,6 +1,6 @@
 class Slicer ():
-    def __init__(self, image):
-        self.image=image
+    def __init__(self, image_main):
+        self.image=image_main
         
     def image_2 (self,image):
       img_1t=tf.image.rot90(image=image, k=1)
