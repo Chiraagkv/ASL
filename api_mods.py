@@ -1,4 +1,4 @@
-def model_make (data_path, checkpoints=False, model_type='api', show_loss_curves=False):
+def model_make (data_path, checkpoints=False, model_type='api', show_loss_curves=False, api_dense_layer_activate):
   def show_crv (boolean, hist):
     if boolean==True:
       lrs=1e-4*10**(np.arange(0, 50)/200)
@@ -18,7 +18,7 @@ def model_make (data_path, checkpoints=False, model_type='api', show_loss_curves
                                                      cval=0.0)
     data=data.flow_from_directory(directory=data_path,
                                   target_size=(224, 224),
-                                  class_mode='binary',
+                                  class_mode='categorical',
                                   batch_size=19,
                                   shuffle=False,
                                   interpolation='bilinear')
@@ -58,7 +58,7 @@ def model_make (data_path, checkpoints=False, model_type='api', show_loss_curves
                              tf.keras.layers.Dense(16, activation='relu'),
 
 
-                             tf.keras.layers.Dense(len(data_path), activation='softmax')
+                             tf.keras.layers.Dense(len(os.listdir(data_path)), activation='softmax')
     ])
 
     model.compile(loss=tf.keras.losses.categorical_crossentropy,
@@ -68,7 +68,12 @@ def model_make (data_path, checkpoints=False, model_type='api', show_loss_curves
       history=model.fit(data, 
               epochs=50,
               steps_per_epoch=len(data),
-              callbacks=tf.keras.callbacks.LearningRateScheduler(lambda epochs: 1e-4*10**(epochs/200)))
+              callbacks=[tf.keras.callbacks.LearningRateScheduler(lambda epochs: 1e-4*10**(epochs/200))
+                        tf.keras.callbacks.ModelChecpoint(log_dir='checkpoints.ckpt',
+                                                         monitor='accuracy',
+                                                         save_weight_only=True,
+                                                         verbose=1)]
+                       )
     else:
       inpus=str(input("Enter the filename (**Full path**): "))
       try:
