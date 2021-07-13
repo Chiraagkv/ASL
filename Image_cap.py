@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import random as rd
 import time
+
 class Image_detector ():
     def __init__(self, path, show_boxes=True, thresh_rate=1):
         self.path=path
