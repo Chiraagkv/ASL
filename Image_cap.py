@@ -4,24 +4,23 @@ import random as rd
 import time
 import pickle
 import os
+import tensorflow as tf
 import sys
 
 
 class Image_detector ():
-    def __init__(self, show_boxes=True, thresh_rate=1, cascade_path):
-        try:
-            self.cascade_path=cascade_path
-        except Exception as e:
-            print ("Error aoocured while process")
-            sys.exit()
-        self.hand_cascade=cv2.CascadeClassifier(self.cascade_path)
+    def __init__(self, show_boxes=True, thresh_rate=1, train_directory=None):
+        self.train_dir=train_directory
+        self.hand_cascade=cv2.CascadeClassifier(r'')
         self.list=[]
         self.show_boxes=show_boxes
         self.thresh_rate=thresh_rate
         self.crop_list=[]
-        
-        os.removedirs('images_folder')
-        os.remove('predictions.bat')
+        try:
+            os.removedirs('images_folder')
+            os.remove('predictions.bat')
+        except Excetion as e:
+            pass
 
         try:
             os.makedirs('images_folder')
@@ -49,6 +48,13 @@ class Image_detector ():
 
         return orig_frame
     def image_processor (self):
+        """
+        The function where the model gets the frame of the webcame and preprocesses it to
+        the detect function
+
+        Returns:
+            [type]: [description]
+        """
         vid=cv2.VideoCapture(0)
 
         while True:
@@ -93,6 +99,11 @@ class Image_detector ():
 
 
     def file_handler (self):
+        """
+        This is a function that appends the data to the `predictions.bat` file
+        ehich contains the essential info for the cropping of the image
+
+        """
         with open('predictions.bat', 'wb') as f:
             for (roots, dirs, files) in os.walk('images_folder'):
                 for i in range (len(files)):
@@ -102,9 +113,32 @@ class Image_detector ():
                     pickle.dump(resluts, f)
         f.close()
 
+    def model_preds (self, model_path):
+        """
+        This model helps in predicting the cropped images lists, 
+        and writing it into a batch file.
+
+        Args:
+            model_path ([path]): The path were the model has been saved
+        """
+
+        f=open('predictions_model.bat', 'wb')
+
+        model=tf.keras.load_model(model_path)
+
+        for i in range (len(files) for _,_,files in os.walk('images_folder')):
+            
+            image=tf.io.read_file('images_folder\\'+files[i])
+            image=tf.image.decode_image(image)
+            image=tf.image.resize(images=image, size=(200, 200))
+            image=image/255.
+            
+            classes=sorted(os.listdir(self.train_dir))
+            preds=model.predict(image)
+            preds=classes[tf.round(preds.argmax())]
+
+            answer=f"images_folder\\{files[i]}:{preds}"
+            pickle.dump(answer, f)
+        f.close()
+
 a=Image_detector(thresh_rate=0.5)
-
-
-
-
-        
