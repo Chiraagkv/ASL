@@ -128,3 +128,12 @@ def run_detector(frames):
       break
     else:
       pass
+
+video=cv2.VideoCapture(0)
+while True:
+    _, frame=video.read()
+    run_detector(frames=frame)
+    if cv2.waitkey(0) & 0xFF == ord('q'):
+        break
+video.release()
+cv2.destroyallwindows()
