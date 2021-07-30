@@ -10,8 +10,7 @@ import tempfile
 from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
 import pickle
 
-#**Note**
-#Make sure to save this model some where so that this doesn't impise any problem
+
 module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
 model = hub.load(module_handle)
 def display_image(image):
@@ -114,24 +113,18 @@ def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
 
             else:
               pass
-
-def load_img(path):
-    img = tf.io.read_file(path)
-    img = tf.image.decode_jpeg(img, channels=3)
-    return img
-def run_detector(detector, path):
-    img = load_img(path)
-    converted_img  = tf.image.convert_image_dtype(img, tf.float32)[tf.newaxis, ...]
-    result = detector(converted_img)
-    result = {key:value.numpy() for key,value in result.items()}
-    for m in range (len(result['detection_class_entities'])):
-      if b"Human hand"==result['detection_class_entities'][m]:
-        image_with_boxes = draw_boxes(
-          img.numpy(), result["detection_boxes"],
-          result["detection_class_entities"], result["detection_scores"])
-        print("Hand Present")
-        display_image(image_with_boxes)
-        break
-      else:
-        pass
-run_detector(model.signatures['default'], #Your image a.k.a open cv frames)
+def run_detector(frames):
+  img = cv2.cvtColor(frames, cv2.COLOR_BGR2RGB)
+  converted_img  = tf.image.convert_image_dtype(frames, tf.float32)[tf.newaxis, ...]
+  result = model.signatures['default'](converted_img)
+  result = {key:value.numpy() for key,value in result.items()}
+  for m in range (len(result['detection_class_entities'])):
+    if b"Human hand"==result['detection_class_entities'][m]:
+      image_with_boxes = draw_boxes(
+        img.numpy(), result["detection_boxes"],
+        result["detection_class_entities"], result["detection_scores"])
+      print("Hand Present")
+      #display_image(image_with_boxes)
+      break
+    else:
+      pass
