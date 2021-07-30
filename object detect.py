@@ -8,8 +8,10 @@ import time
 import matplotlib.pyplot as plt
 import tempfile
 from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
+import pickle
 
-
+#**Note**
+#Make sure to save this model some where so that this doesn't impise any problem
 module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
 model = hub.load(module_handle)
 def display_image(image):
@@ -79,6 +81,7 @@ def draw_bounding_box_on_image(image,
 
 def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
     colors = list(ImageColor.colormap.values())
+    f=open('predictions.txt', 'w')
 
     try:
         font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf",
@@ -90,22 +93,27 @@ def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
     for i in range(min(boxes.shape[0], max_boxes)):
         if scores[i] >= min_score:
             ymin, xmin, ymax, xmax = tuple(boxes[i])
-            display_str = "{}: {}%".format(class_names[i].decode("ascii"),
-                                         int(100 * scores[i]))
-            color = colors[hash(class_names[i]) % len(colors)]
-            image_pil = Image.fromarray(np.uint8(image)).convert("RGB")
-            draw_bounding_box_on_image(image_pil,
-                                       ymin,
-                                       xmin,
-                                       ymax,
-                                       xmax,
-                                       color,
-                                       font,
-                                       display_str_list=[display_str])
-            np.copyto(image, np.array(image_pil))
-        
-    return image
+            if class_names[i].decode('ascii')=='Human hand':
+              display_str = "{}: {}%".format(class_names[i].decode("ascii"),
+                                           int(100 * scores[i]))
+              color = colors[hash(class_names[i]) % len(colors)]
+              image_pil = Image.fromarray(np.uint8(image)).convert("RGB")
+              draw_bounding_box_on_image(image_pil,
+                                         ymin,
+                                         xmin,
+                                         ymax,
+                                         xmax,
+                                         color,
+                                         font,
+                                         display_str_list=[display_str])
+              main_str=f"{ymin}-{xmin}-{ymax}-{xmax}"
+              f.write(main_str)
+              np.copyto(image, np.array(image_pil))
+              return image
 
+
+            else:
+              pass
 
 def load_img(path):
     img = tf.io.read_file(path)
@@ -117,7 +125,7 @@ def run_detector(detector, path):
     result = detector(converted_img)
     result = {key:value.numpy() for key,value in result.items()}
     for m in range (len(result['detection_class_entities'])):
-      if b"Human" in result['detection_class_entities'][m]:
+      if b"Human hand"==result['detection_class_entities'][m]:
         image_with_boxes = draw_boxes(
           img.numpy(), result["detection_boxes"],
           result["detection_class_entities"], result["detection_scores"])
@@ -126,19 +134,4 @@ def run_detector(detector, path):
         break
       else:
         pass
-
-
-
-class Image_taker ():
-    def __init__(self):
-        self.vis=cv2.VideoCapture(0)
-    def process (self):
-        while True:
-            _, frames=self.vis.read()
-            cv2.imwrite("New_img.jpg", frames)
-            run_detector(detector, 'New_img.jpg')
-            os.remove("New_img.jpg")
-        pass
-
-a=Image_taker()
-a.process()
+run_detector(model.signatures['default'], #Your image a.k.a open cv frames)
