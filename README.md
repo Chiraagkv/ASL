@@ -15,7 +15,7 @@ This project aims to help those who are deaf and do not know Americal Sign Langu
   
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/Chiraagkv/ASL/blob/main/LICENSE)
 
   
 ## Installation
