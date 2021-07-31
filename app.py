@@ -24,7 +24,7 @@ while run:
   # Capture frame-by-frame
   ret, frame = cap.read()
   # Display the resulting frame
-  path = 'C:\\Users\\abc\\OneDrive\\Desktop\\ASL_deploy\\images\\img.jpg'
+  path = './images/img.jpg'
   cv2.imwrite(path, frame)
   pred, conf = predict_custom(image=path, model=model)
   frame = cv2.putText(frame, f"{pred}, {conf}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
