@@ -20,7 +20,7 @@ This project aims to help those who are deaf and do not know Americal Sign Langu
   
 ## Installation
 
-Install this project with git
+Clone this project with git
 
 ```bash
 git clone https://github.com/Chiraagkv/ASL.git
