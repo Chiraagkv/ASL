@@ -17,7 +17,7 @@ except ValueError:
 cap = cv2.VideoCapture(cap_num, cv2.CAP_DSHOW)
 run = st.checkbox('Run')
 
-model = load_model(model_path='C:\\Users\\abc\\OneDrive\\Desktop\\ASL_deploy\\my_model.h5')
+model = load_model(model_path='./20210711-162248-big-one.h5')
 # Read until q is pressed is completed
 while run:
   sleep(0.08)
