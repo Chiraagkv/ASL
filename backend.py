@@ -26,9 +26,8 @@ IMAGE_SIZE = 200
 def process_image(img):
 	data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
 	# image = tf.constant(img, dtype="float32")
-	image = tf.io.read_file(img)
-	image = tf.image.decode_jpeg(image, channels=3)
-	image = tf.image.resize(image, [200, 200])
+
+	image = tf.image.resize(img, [200, 200])
 
 	image_array = np.asarray(image)
 	normalized_image_array = (image_array.astype(np.float32) / 127.0) -1
@@ -47,7 +46,7 @@ def load_model(model_path):
   return model
 
 def predict_custom(image, model):
-	# model = load_model(model_path='C:\\Users\\abc\\OneDrive\\Desktop\\ASL_deploy\\my_model.h5')
+	
 	custom_data = process_image(image)
 	custom_preds = model.predict(custom_data)
 	conf = f'{np.max(custom_preds[0])* 100:.2f}%'
