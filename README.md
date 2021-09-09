@@ -8,9 +8,9 @@ In recent years, ASL has become the medium of communication for thousands, if no
 
 - [@Chiraagkv](https://github.com/Chiraagkv)
 - [@yashppawar](https://github.com/yashppawar)
-- [rohitkumar9989](https://github.com/rohitkumar9989)
-- [idontcalculate](https://github.com/idontcalculate)
-
+- [@rohitkumar9989](https://github.com/rohitkumar9989)
+- [@idontcalculate](https://github.com/idontcalculate)
+- [@YashVardhan-AI](https://github.com/YashVardhan-AI)
   
 ## License
 
@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ## Usage/Examples
 
 ```bash
-streamlit run app.py
+streamlit run webrtc.py
 ```
 
   
