@@ -35,7 +35,7 @@ class VideoTransformer(VideoTransformerBase):
                         y_max = y
                     if y < y_min:
                         y_min = y
-                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (130, 255, 20), 5)
+#                 cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (130, 255, 20), 5)
                 mp_drawing.draw_landmarks(frame, handLMs, mphands.HAND_CONNECTIONS)
                 frame = cv2.putText(frame, f"{pred}, {conf}", (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 
