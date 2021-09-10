@@ -1,7 +1,7 @@
 streamlit==0.88.0
 numpy==1.19.5
 tensorflow==2.5.0
-opencv_python==4.5.3.56
+opencv-python==4.5.3.56
 pandas==1.2.4
 mediapipe==0.8.7.2
 tensorflow_hub==0.12.0
