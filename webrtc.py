@@ -3,7 +3,7 @@ import mediapipe as mp
 import numpy as np
 from backend import load_model, predict_custom
 import streamlit as st
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, ClientSettings
 
 model = load_model(model_path='./20210711-162248-big-one.h5')
 
@@ -46,4 +46,7 @@ class VideoTransformer(VideoTransformerBase):
                 
         return frame       
     
-webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
+webrtc_streamer(client_settings = ClientSettings(
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            media_stream_constraints={"video": True, "audio": False},
+        ),key="example", video_transformer_factory=VideoTransformer)
