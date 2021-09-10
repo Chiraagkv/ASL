@@ -22,12 +22,26 @@ from PIL import Image, ImageOps
 breednames = np.array(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
              "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "del", "nothing", "space"])
 IMAGE_SIZE = 200
+def bgr_to_rgb(input, name=None):
+    """
+    Convert a BGR image to RGB.
+    Args:
+      input: A 3-D (`[H, W, 3]`) or 4-D (`[N, H, W, 3]`) Tensor.
+      name: A name for the operation (optional).
+    Returns:
+      A 3-D (`[H, W, 3]`) or 4-D (`[N, H, W, 3]`) Tensor.
+    """
+    bgr = tf.unstack(input, axis=-1)
+    b, g, r = bgr[0], bgr[1], bgr[2]
+    return tf.stack([r, g, b], axis=-1)
+
 
 def process_image(img):
 	data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
 	# image = tf.constant(img, dtype="float32")
 
 	image = tf.image.resize(img, [200, 200])
+	image = bgr_to_rgb(image)
 
 	image_array = np.asarray(image)
 	normalized_image_array = (image_array.astype(np.float32) / 127.0) -1

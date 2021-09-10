@@ -11,11 +11,6 @@ mphands = mp.solutions.hands
 hands = mphands.Hands()
 mp_drawing = mp.solutions.drawing_utils
 
-st.set_page_config(
-    page_title='ASL letters Detection')
-
-st.markdown("### Press the start button to run the app :point_down:")
-
 class VideoTransformer(VideoTransformerBase):
 
     def transform(self, frame):
@@ -46,4 +41,3 @@ class VideoTransformer(VideoTransformerBase):
                 
         return frame       
     
-webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
