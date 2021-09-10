@@ -16,10 +16,10 @@ page = st.sidebar.selectbox("Select page:", options=[
 
 if page == "Demo":
     st.title("ASL to Text Demo")
-    ctxt = webrtc_streamer(key="ASL", 
+    ctxt = webrtc_streamer(key="ASL",
                            video_transformer_factory=VideoTransformer, 
-                           client_settings = ClientSettings(media_stream_constraints={"video": True, 
-                                                                                      "audio": False}))
+                           client_settings = ClientSettings(rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+                           media_stream_constraints={"video": True, "audio": False}))
     if not ctxt.video_transformer:
         st.markdown("### Press the start button to run the app :point_up:")
     
